@@ -1,0 +1,15 @@
+# Build and generated output
+/dist/
+/generated/
+
+# Logs
+*.log
+
+# Go test/build artifacts
+*.test
+*.out
+*.prof
+
+# Editor/OS noise
+.DS_Store
+.vscode/

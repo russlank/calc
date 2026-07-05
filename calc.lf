@@ -1,0 +1,47 @@
+%target go
+%package calc
+%semantic go mode reducer
+%semantic go import calcsem "calc/semantics"
+%semantic go type S float64
+%semantic go type Expr float64
+%semantic go type Term float64
+%semantic go type Factor float64
+%start S
+%token Number Plus Minus Mul Div LParen RParen
+
+%% lexer
+DIGIT = [0-9];
+NUMBER = DIGIT+ ("." DIGIT+)?;
+
+NUMBER     => token(Number);
+"+"        => token(Plus);
+"-"        => token(Minus);
+"*"        => token(Mul);
+"/"        => token(Div);
+"("        => token(LParen);
+")"        => token(RParen);
+[1-32]+    => skip;
+
+%% parser
+S : value=Expr {go: start} ;
+Expr : left=Expr Plus right=Term
+         {go: add}
+     | left=Expr Minus right=Term
+         {go: subtract}
+     | value=Term
+         {go: pass}
+     ;
+Term : left=Term Mul right=Factor
+         {go: multiply}
+     | left=Term Div right=Factor
+         {go: divide}
+     | value=Factor
+         {go: pass}
+     ;
+Factor : token=Number
+           {go: number}
+       | LParen value=Expr RParen
+           {go: group}
+       | Minus value=Factor
+           {go: negate}
+       ;
