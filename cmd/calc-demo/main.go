@@ -36,7 +36,7 @@ func main() {
 }
 
 func runCalcDemo(name, source string) (string, error) {
-	value, err := calc.ParseWithReducerFromSource(calc.NewScanner(source), calc.ReducerFunc(calcsem.Reduce))
+	value, err := calc.ParseWithReducerFromLexemeSource(calc.NewScanner(source), calc.ReducerFunc(calcsem.Reduce))
 	if err != nil {
 		return "", fmt.Errorf("parse %s: %w", name, err)
 	}
